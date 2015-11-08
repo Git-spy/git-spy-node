@@ -1,0 +1,26 @@
+{
+  "name": "git-spy-node",
+  "version": "0.1.0",
+  "description": "Gitspy node backend",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "supervisor index.js",
+    "deploy": "git push heroku master",
+    "set_remote": "git remote rm heroku && heroku git:remote -a mp3trify"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Git-spy/git-spy-node.git"
+  },
+  "author": "git-spy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Git-spy/git-spy-node/issues"
+  },
+  "homepage": "https://github.com/Git-spy/git-spy-node",
+  "dependencies": {
+    "octonode": "^0.7.4",
+    "restify": "^4.0.3"
+  }
+}
