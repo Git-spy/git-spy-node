@@ -4,7 +4,7 @@ var server = restify.createServer({
   name: 'gitspy',
   version: '0.1.0'
 });
-var PORT = 8080;
+var PORT = process.env.PORT || 8080;
 
 server.use(restify.acceptParser(server.acceptable));
 server.use(restify.queryParser());
