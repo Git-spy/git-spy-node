@@ -10,7 +10,7 @@ server.use(restify.acceptParser(server.acceptable));
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
 
-server.get('/stats', function (req, res, next) {
+server.get('/repos', function (req, res, next) {
   var userId = req.params.user_id;
   var repoId = req.params.repo_id;
   var stat = new Stat(userId, repoId);
