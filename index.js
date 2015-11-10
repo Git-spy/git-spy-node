@@ -16,7 +16,7 @@ server.get('/repos', function (req, res, next) {
   var stat = new Stat(userId, repoId);
 
   stat.load(function(err, info) {
-    res.send(info);
+    res.send({repos: info});
 
     return next();
   });
