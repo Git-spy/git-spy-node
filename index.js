@@ -16,20 +16,9 @@ server.get('/me', function(req, res, next) {
   var token = req.headers.access_token;
   var user = new User(token);
 
-  user.me(function(err, data, headers) {
+  user.me(function(err, data) {
     res.send({
-      user: {
-        id: data.id,
-        nickname: data.login,
-        name: data.name,
-        avatar_url: data.avatar_url,
-        company: data.company,
-        location: data.location,
-        bio: data.bio,
-        repositories: data.public_repos,
-        followers: data.followers,
-        following: data.following
-      }
+      user: data
     });
 
     return next();
