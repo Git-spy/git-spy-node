@@ -23,6 +23,8 @@
   "dependencies": {
     "octonode": "^0.7.4",
     "pg": "^4.4.3",
-    "restify": "^4.0.3"
+    "pg-hstore": "^2.3.2",
+    "restify": "^4.0.3",
+    "sequelize": "^3.14.2"
   }
 }

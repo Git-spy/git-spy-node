@@ -1,6 +1,5 @@
 var restify = require('restify');
-var pg = require('pg');
-var Stat = require('./lib/stat');
+var Repo = require('./lib/repo');
 var User = require('./lib/user');
 var env = require('./lib/env');
 var server = restify.createServer({
@@ -18,7 +17,20 @@ server.get('/me', function(req, res, next) {
   var user = new User(token);
 
   user.me(function(err, data, headers) {
-    res.send(data);
+    res.send({
+      user: {
+        id: data.id,
+        nickname: data.login,
+        name: data.name,
+        avatar_url: data.avatar_url,
+        company: data.company,
+        location: data.location,
+        bio: data.bio,
+        repositories: data.public_repos,
+        followers: data.followers,
+        following: data.following
+      }
+    });
 
     return next();
   });
@@ -40,29 +52,30 @@ server.get('/limit', function(req, res, next) {
 });
 
 server.get('/repos', function (req, res, next) {
+  var token = req.headers.access_token;
   var userId = req.params.user_id;
   var repoId = req.params.repo_id;
-  var stat = new Stat(userId, repoId);
+  var repo = new Repo(token);
 
-  stat.load(function(err, info) {
+  repo.load(userId, repoId, function(err, info) {
     res.send({repos: info});
 
     return next();
   });
 });
 
-server.post('/repos/:repo_id', function(req, res) {
-  var repoId = req.params.repo_id;
+server.post('/repos/:repo_id', function(req, res, next) {
   // TODO: Sanetize data
-  res.send({repoId: repoId});
-});
+  var token = req.headers.access_token;
+  var repoId = req.params.repo_id;
+  var repo = new Repo(token);
 
-var client = new pg.Client(env.databaseUrl);
+  // TODO: handle error
+  repo.subscribe(repoId, function() {
+    res.send({status: "ok"});
 
-client.connect(function(err) {
-  if (err) {
-    return console.error('could not connect to postgres', err);
-  }
+    return next();
+  });
 });
 
 server.listen(env.port, function () {
