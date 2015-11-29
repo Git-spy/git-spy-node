@@ -1,6 +1,7 @@
 var restify = require('restify');
 var pg = require('pg');
 var Stat = require('./lib/stat');
+var User = require('./lib/user');
 var env = require('./lib/env');
 var server = restify.createServer({
   name: 'gitspy',
@@ -10,6 +11,33 @@ var server = restify.createServer({
 server.use(restify.acceptParser(server.acceptable));
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
+
+// TODO: Move request handlers to different file
+server.get('/me', function(req, res, next) {
+  var token = req.headers.access_token;
+  var user = new User(token);
+
+  user.me(function(err, data, headers) {
+    res.send(data);
+
+    return next();
+  });
+});
+
+server.get('/limit', function(req, res, next) {
+  var token = req.headers.access_token;
+  var user = new User(token);
+
+  user.limit(function(err, data, headers) {
+    res.send({
+      limit: {
+        requests: data
+      }
+    });
+
+    return next();
+  });
+});
 
 server.get('/repos', function (req, res, next) {
   var userId = req.params.user_id;
