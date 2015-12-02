@@ -46,7 +46,7 @@ server.get('/repos', function (req, res, next) {
   var repoId = req.params.repo_id;
   var repo = new Repo(token);
 
-  repo.load(userId, repoId, function(err, info) {
+  repo.load(userId, repoId, function(info) {
     res.send({repos: info});
 
     return next();
