@@ -1,4 +1,11 @@
 {
+  "development": {
+    "username": "HEZ",
+    "password": null,
+    "database": "gitspy",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
   "production": {
     "use_env_variable": "DATABASE_URL"
   }
