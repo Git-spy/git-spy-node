@@ -8,7 +8,8 @@
     "dev": "supervisor index.js",
     "deploy": "git push heroku master",
     "set_remote": "git remote rm heroku && heroku git:remote -a gitspy",
-    "db": "heroku pg:psql"
+    "db": "heroku pg:psql",
+    "bash": "heroku run bash"
   },
   "repository": {
     "type": "git",
