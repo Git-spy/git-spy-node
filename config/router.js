@@ -67,4 +67,26 @@ module.exports = function(server) {
       return next();
     });
   });
+
+  server.del('/repos/:repo_id', function(req, res, next) {
+    var token = req.headers.access_token;
+    var repoId = req.params.repo_id;
+    var repo = new Repo(token);
+
+    repo.unsubscribe(repoId).then(function() {
+      res.send({
+        status: "ok"
+      });
+
+      return next();
+    }).catch(function(err) {
+      res.send({
+        status: "error",
+        message: err.message,
+        errors: err.errors
+      });
+
+      return next();
+    });
+  });
 };
