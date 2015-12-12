@@ -51,7 +51,6 @@ module.exports = function(server) {
     var repoId = req.params.repo_id;
     var repo = new Repo(token);
 
-    // TODO: handle error
     repo.subscribe(repoId).then(function() {
       res.send({
         status: "ok"
@@ -61,7 +60,8 @@ module.exports = function(server) {
     }).catch(function(err) {
       res.send({
         status: "error",
-        message: err.message
+        message: err.message,
+        errors: err.errors
       });
 
       return next();
