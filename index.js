@@ -1,7 +1,6 @@
 var restify = require('restify');
-var Repo = require('./lib/repo');
-var User = require('./lib/user');
-var env = require('./lib/env');
+var env = require('./config/environment');
+var router = require('./config/router');
 var server = restify.createServer({
   name: 'gitspy',
   version: '0.1.0'
@@ -11,61 +10,7 @@ server.use(restify.acceptParser(server.acceptable));
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
 
-// TODO: Move request handlers to different file
-server.get('/me', function(req, res, next) {
-  var token = req.headers.access_token;
-  var user = new User(token);
-
-  user.me(function(err, data) {
-    res.send({
-      user: data
-    });
-
-    return next();
-  });
-});
-
-server.get('/limit', function(req, res, next) {
-  var token = req.headers.access_token;
-  var user = new User(token);
-
-  user.limit(function(err, data, headers) {
-    res.send({
-      limit: {
-        requests: data
-      }
-    });
-
-    return next();
-  });
-});
-
-server.get('/repos', function (req, res, next) {
-  var token = req.headers.access_token;
-  var userId = req.params.user_id;
-  var repoId = req.params.repo_id;
-  var repo = new Repo(token);
-
-  repo.load(userId, repoId, function(info) {
-    res.send({repos: info});
-
-    return next();
-  });
-});
-
-server.post('/repos/:repo_id', function(req, res, next) {
-  // TODO: Sanetize data
-  var token = req.headers.access_token;
-  var repoId = req.params.repo_id;
-  var repo = new Repo(token);
-
-  // TODO: handle error
-  repo.subscribe(repoId, function() {
-    res.send({status: "ok"});
-
-    return next();
-  });
-});
+router(server);
 
 server.listen(env.port, function () {
   console.log('%s listening at %s', server.name, server.url);
