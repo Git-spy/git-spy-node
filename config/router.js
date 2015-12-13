@@ -32,11 +32,10 @@ module.exports = function(server) {
 
   server.get('/repos', function(req, res, next) {
     var token = req.headers.access_token;
-    var userId = req.params.user_id;
-    var repoId = req.params.repo_id;
+    var username = req.params.user_id; //TODO: Use user_name
     var repo = new Repo(token);
 
-    repo.load(userId, repoId, function(info) {
+    repo.findByUser(username).then(function(info) {
       res.send({
         repos: info
       });
